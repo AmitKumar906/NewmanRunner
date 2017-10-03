@@ -1,0 +1,222 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Test WebFlow",
+		"_postman_id": "f2c1d9db-062b-ff60-1a8b-06657cf4c1f6",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://capi.redbus.com/api/Bus/v1/Routes/122/123/30-Sep-2017?src=Bangalore&dst=Chennai",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"if(tests[\"Status code is 200\"] = responseCode.code === 200){",
+							"    if(responseBody!=null && responseBody != undefined && typeof(JSON.parse(responseBody))==\"object\")",
+							"    var responseJson = JSON.parse(responseBody);",
+							"    if(responseJson.RIN){",
+							"        if(responseJson.RIN.length>0){",
+							"            if(!responseJson.RIN[0].IsGroup){",
+							"               ",
+							"                for(var i=0;i<=responseJson.RIN[0].InvList.length-1;i++){",
+							"                    if(i==50){",
+							"                        postman.setEnvironmentVariable(\"routeId\", responseJson.RIN[0].InvList[i].RtId);",
+							"                        postman.setEnvironmentVariable(\"opId\", responseJson.RIN[0].InvList[i].OpId);",
+							"                        console.log(\"amit\"+responseJson.RIN[0].InvList[i].RtId);",
+							"                        postman.setEnvironmentVariable(\"SearchApiStatus\",true);",
+							"                         //postman.setNextRequest('Request 2')",
+							"                    }",
+							"                }",
+							"            }",
+							"        }",
+							"    }",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"raw": "https://capi.redbus.com/api/Bus/v1/Routes/{{SrpSourceId}}/{{SrpDestinationId}}/{{SrpSearchDate}}?src={{SrpSourceCity}}&dst={{SrpDestinationCity}}",
+					"protocol": "https",
+					"host": [
+						"capi",
+						"redbus",
+						"com"
+					],
+					"path": [
+						"api",
+						"Bus",
+						"v1",
+						"Routes",
+						"{{SrpSourceId}}",
+						"{{SrpDestinationId}}",
+						"{{SrpSearchDate}}"
+					],
+					"query": [
+						{
+							"key": "src",
+							"value": "{{SrpSourceCity}}",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "dst",
+							"value": "{{SrpDestinationCity}}",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Country_Name",
+						"value": "IND",
+						"description": ""
+					},
+					{
+						"key": "Channel_Name",
+						"value": "WEB_DIRECT",
+						"description": ""
+					},
+					{
+						"key": "BusinessUnit",
+						"value": "BUS",
+						"description": ""
+					},
+					{
+						"key": "Currency",
+						"value": "INR",
+						"description": ""
+					},
+					{
+						"key": "Auth_key",
+						"value": "fb26b9d6-28d5-4a43-a3f2-759839d7fdd7",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "SelectedCurrency",
+						"value": "INR",
+						"description": ""
+					},
+					{
+						"key": "language",
+						"value": "en",
+						"description": "",
+						"disabled": true
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "https://capi.redbus.com/api/Bus/v1/SeatLayout/{{routeId}}/{{SrpSearchDate\n}}/95",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"if(tests[\"Status code is 200\"] = responseCode.code === 200){",
+							"    var jsonResponse = JSON.parse(responseBody);",
+							"      if(jsonResponse!=null && jsonResponse != undefined && typeof(jsonResponse)==\"object\"){",
+							"           for(var i=0;i<=jsonResponse.seatlist.length-1;i++){",
+							"                if(!jsonResponse.seatlist[i].IsLadies){",
+							"                    if(jsonResponse.seatlist[i].IsAvailable){",
+							"                        console.log('found a seat and goigg to break.');",
+							"                        tests[\"found a available seat\"] = jsonResponse.seatlist[i].IsAvailable ===true;",
+							"                        postman.setEnvironmentVariable(\"SeatlayoutApiStatus\",true);",
+							"                        break;",
+							"                    }",
+							"                }",
+							"            }",
+							"      }",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://capi.redbus.com/api/Bus/v1/SeatLayout/{{routeId}}/{{SrpSearchDate}}/{{opId}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Country_Name",
+						"value": "IND",
+						"description": ""
+					},
+					{
+						"key": "Channel_Name",
+						"value": "WEB_DIRECT",
+						"description": ""
+					},
+					{
+						"key": "BusinessUnit",
+						"value": "BUS",
+						"description": ""
+					},
+					{
+						"key": "Currency",
+						"value": "INR",
+						"description": ""
+					},
+					{
+						"key": "auth_key",
+						"value": "fb26b9d6-28d5-4a43-a3f2-759839d7fdd7",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "SelectedCurrency",
+						"value": "INR",
+						"description": ""
+					},
+					{
+						"key": "Language",
+						"value": "en",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Submit report",
+			"request": {
+				"url": "https://hooks.slack.com/services/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",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"Tenting done for {{SrpSourceCity}} to {{SrpDestinationCity}} for routeId- {{routeId}} and operatorId- {{opId}} and results are  search result loaded :{{SearchApiStatus}} Seat layout loaded for same SRP :{{SeatLayoutStatus}}\",\"username\":\"Amit\"}"
+				},
+				"description": "https://hooks.slack.com/services/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"
+			},
+			"response": []
+		}
+	]
+}

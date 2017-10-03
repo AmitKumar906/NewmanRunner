@@ -1,0 +1,15 @@
+{
+  "name": "NewmanRunner",
+  "version": "1.0.0",
+  "description": "Run Redbus collection with newman project",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Amit Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.1",
+    "newman": "^3.8.2"
+  }
+}
